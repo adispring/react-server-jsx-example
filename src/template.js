@@ -5,7 +5,7 @@ export default ({ body, title, initialState }) =>
       <head>
         <script>window.__APP_INITIAL_STATE__ = ${initialState}</script>
         <title>${title}</title>
-        <link rel="stylesheet" href="/assets/style.css" />
+        <link rel="stylesheet" href="/assets/main.css" />
       </head>
       
       <body>

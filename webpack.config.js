@@ -13,55 +13,35 @@ const rules = [
     exclude: /node_modules/,
     loader: 'babel-loader',
     options: {
-      presets: ['es2015', 'stage-0', 'react'],
+      presets: ['es2015', 'stage-0', 'react', 'react-hmre'],
     },
   },
 ];
 
-module.exports = [
-  {
-    entry: './src/server.js',
-    output: {
-      path: `${__dirname}/dist`,
-      filename: 'server.js',
-      libraryTarget: 'commonjs2',
-      publicPath: '/',
-    },
-    target: 'node',
-    externals: nodeExternals(),
-    plugins: productionPluginDefine,
-    module: {
-      rules: rules.concat([
-        {
-          test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: 'css-loader',
-          }),
-        },
-      ]),
-    },
+module.exports = {
+  devtool: 'inline-source-map',
+  entry: [
+    'webpack-hot-middleware/client',
+    './src/app/browser.js',
+  ],
+  output: {
+    path: `${__dirname}/dist/assets`,
+    publicPath: '/assets/',
+    filename: 'bundle.js',
   },
-  {
-    entry: './src/app/browser.js',
-    output: {
-      path: `${__dirname}/dist/assets`,
-      publicPath: '/',
-      filename: 'bundle.js',
-    },
-    module: {
-      rules: rules.concat([
-        {
-          test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: 'css-loader',
-          }),
-        },
-      ]),
-    },
-    plugins: [
-      new ExtractTextPlugin('style.css'),
-    ],
+  module: {
+    rules: rules.concat([
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: 'css-loader',
+        }),
+      },
+    ]),
   },
-];
+  plugins: [
+    new ExtractTextPlugin('[name].css'),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
+};
